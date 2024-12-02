@@ -9,27 +9,27 @@ import (
 )
 
 type Book struct {
-	BookID        int32
-	CollectionID  sql.NullInt32
-	Title         sql.NullString
-	Author        sql.NullString
-	Language      sql.NullString
-	YearPublished sql.NullInt32
-	Isbn          sql.NullString
-	CreatedAt     sql.NullTime
+	BookID        int32          `json:"book_id"`
+	CollectionID  sql.NullInt32  `json:"collection_id"`
+	Title         sql.NullString `json:"title"`
+	Author        sql.NullString `json:"author"`
+	Language      sql.NullString `json:"language"`
+	YearPublished sql.NullInt32  `json:"year_published"`
+	Isbn          sql.NullString `json:"isbn"`
+	CreatedAt     sql.NullTime   `json:"created_at"`
 }
 
 type Collection struct {
-	CollectionID int32
-	UserID       sql.NullInt32
-	Name         sql.NullString
-	Status       sql.NullInt32
-	CreatedAt    sql.NullTime
+	CollectionID int32          `json:"collection_id"`
+	UserID       sql.NullInt32  `json:"user_id"`
+	Name         sql.NullString `json:"name"`
+	Status       sql.NullInt32  `json:"status"`
+	CreatedAt    sql.NullTime   `json:"created_at"`
 }
 
 type User struct {
-	ID        int32
-	Username  sql.NullString
-	Role      sql.NullString
-	CreatedAt sql.NullTime
+	ID        int32          `json:"id"`
+	Username  sql.NullString `json:"username"`
+	Role      sql.NullString `json:"role"`
+	CreatedAt sql.NullTime   `json:"created_at"`
 }

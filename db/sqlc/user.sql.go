@@ -15,8 +15,8 @@ INSERT INTO users (username, role) VALUES (?, ?)
 `
 
 type CreateUserParams struct {
-	Username sql.NullString
-	Role     sql.NullString
+	Username sql.NullString `json:"username"`
+	Role     sql.NullString `json:"role"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (sql.Result, error) {
@@ -85,9 +85,9 @@ UPDATE users SET username = ?, role = ? WHERE id = ?
 `
 
 type UpdateUserParams struct {
-	Username sql.NullString
-	Role     sql.NullString
-	ID       int32
+	Username sql.NullString `json:"username"`
+	Role     sql.NullString `json:"role"`
+	ID       int32          `json:"id"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {

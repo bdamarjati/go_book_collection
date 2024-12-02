@@ -1,4 +1,4 @@
--- name: CreateUser :execresult
+-- name: CreateUser :one
 INSERT INTO users (username, role) VALUES (?, ?);
 
 -- name: GetUser :one
