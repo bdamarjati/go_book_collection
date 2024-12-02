@@ -2,34 +2,23 @@
 
 name: CI
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   test:
     name: Test
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    env:
-      DB_DATABASE: book_collection
-      DB_USER: root
-      DB_PASSWORD: root
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Set up MySQL
         run: |
           sudo /etc/init.d/mysql start
-          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u ${{ env.DB_USER }} --password=${{ env.DB_PASSWORD }}
+          mysql -e 'CREATE DATABASE ${{ secrets.DB_NAME }};' -u ${{ secrets.DB_USER }} --password=${{ secrets.DB_PASSWORD }}
 
       - name: Set up Go 1.x
         uses: actions/setup-go@v2
@@ -47,4 +36,4 @@ jobs:
           which migrate
 
       - name: Run Migration
-        run: migrate -database "mysql://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@tcp(localhost:3306)/${{ env.DB_DATABASE }}" -path db/migration -verbose up
+        run: migrate -database "mysql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@tcp(localhost:3306)/${{ secrets.DB_NAME }}" -path db/migration -verbose up
