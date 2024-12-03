@@ -65,7 +65,7 @@ func (q *Queries) ListCollections(ctx context.Context, arg ListCollectionsParams
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Collection
+	items := []Collection{}
 	for rows.Next() {
 		var i Collection
 		if err := rows.Scan(
@@ -104,7 +104,7 @@ func (q *Queries) ListCollectionsByUser(ctx context.Context, arg ListCollections
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Collection
+	items := []Collection{}
 	for rows.Next() {
 		var i Collection
 		if err := rows.Scan(

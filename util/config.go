@@ -3,16 +3,19 @@ package util
 import (
 	"os"
 
+	"github.com/go-sql-driver/mysql"
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	DBDriver   string `mapstructure:"DB_DRIVER"`
-	DBUser     string `mapstructure:"DB_USER"`
-	DBPassword string `mapstructure:"DB_PASSWORD"`
-	DBNet      string `mapstructure:"DB_NET"`
-	DBAddr     string `mapstructure:"DB_ADDR"`
-	DBName     string `mapstructure:"DB_NAME"`
+	DBDriver      string `mapstructure:"DB_DRIVER"`
+	DBUser        string `mapstructure:"DB_USER"`
+	DBPassword    string `mapstructure:"DB_PASSWORD"`
+	DBNet         string `mapstructure:"DB_NET"`
+	DBAddr        string `mapstructure:"DB_ADDR"`
+	DBName        string `mapstructure:"DB_NAME"`
+	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
+	MySqlSource   string
 }
 
 func LoadConfig(path string) (config Config, err error) {
@@ -36,5 +39,15 @@ func LoadConfig(path string) (config Config, err error) {
 		config.DBNet = "tcp"
 		config.DBName = os.Getenv("DB_NAME")
 	}
+	cfg := mysql.Config{
+		User:                 config.DBUser,
+		Passwd:               config.DBPassword,
+		Net:                  config.DBNet,
+		Addr:                 config.DBAddr,
+		DBName:               config.DBName,
+		AllowNativePasswords: true,
+		ParseTime:            true,
+	}
+	config.MySqlSource = cfg.FormatDSN()
 	return
 }
