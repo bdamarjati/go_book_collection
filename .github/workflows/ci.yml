@@ -37,3 +37,6 @@ jobs:
 
       - name: Run Migration
         run: migrate -database "mysql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@tcp(localhost:3306)/${{ secrets.DB_NAME }}" -path db/migration -verbose up
+
+      - name: Run Test
+        run: go test -v -cover ./...

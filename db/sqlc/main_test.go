@@ -25,6 +25,7 @@ func TestMain(m *testing.M) {
 		Addr:                 config.DBAddr,
 		DBName:               config.DBName,
 		AllowNativePasswords: true,
+		ParseTime:            true,
 	}
 
 	conn, err := sql.Open(config.DBDriver, cfg.FormatDSN())
