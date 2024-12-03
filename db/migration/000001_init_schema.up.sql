@@ -2,7 +2,7 @@ CREATE TABLE `users` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
   `username` varchar(255) UNIQUE,
   `role` varchar(255),
-  `created_at` timestamp
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE `books` (
@@ -13,7 +13,7 @@ CREATE TABLE `books` (
   `language` varchar(255),
   `year_published` integer,
   `ISBN` varchar(255),
-  `created_at` timestamp
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE `collections` (
@@ -21,7 +21,7 @@ CREATE TABLE `collections` (
   `user_id` integer,
   `name` varchar(255) UNIQUE,
   `status` integer,
-  `created_at` timestamp
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 ALTER TABLE `collections` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
