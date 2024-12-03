@@ -11,7 +11,7 @@ import (
 
 type Book struct {
 	BookID        int32          `json:"book_id"`
-	CollectionID  sql.NullInt32  `json:"collection_id"`
+	CollectionID  int32          `json:"collection_id"`
 	Title         sql.NullString `json:"title"`
 	Author        sql.NullString `json:"author"`
 	Language      sql.NullString `json:"language"`
@@ -22,7 +22,7 @@ type Book struct {
 
 type Collection struct {
 	CollectionID int32          `json:"collection_id"`
-	UserID       sql.NullInt32  `json:"user_id"`
+	UserID       int32          `json:"user_id"`
 	Name         sql.NullString `json:"name"`
 	Status       sql.NullInt32  `json:"status"`
 	CreatedAt    time.Time      `json:"created_at"`

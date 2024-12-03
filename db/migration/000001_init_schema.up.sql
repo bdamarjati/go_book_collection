@@ -6,8 +6,8 @@ CREATE TABLE `users` (
 );
 
 CREATE TABLE `books` (
-  `book_id` integer PRIMARY KEY,
-  `collection_id` integer,
+  `book_id` integer PRIMARY KEY AUTO_INCREMENT,
+  `collection_id` integer NOT NULL,
   `title` text,
   `author` varchar(255),
   `language` varchar(255),
@@ -17,8 +17,8 @@ CREATE TABLE `books` (
 );
 
 CREATE TABLE `collections` (
-  `collection_id` integer PRIMARY KEY,
-  `user_id` integer,
+  `collection_id` integer PRIMARY KEY AUTO_INCREMENT,
+  `user_id` integer NOT NULL,
   `name` varchar(255) UNIQUE,
   `status` integer,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
