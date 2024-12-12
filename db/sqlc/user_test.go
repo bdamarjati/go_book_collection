@@ -49,7 +49,6 @@ func TestGetUser(t *testing.T) {
 	require.NotEmpty(t, user2)
 
 	require.Equal(t, user1.Username, user2.Username)
-	require.Equal(t, user1.Username, user2.Username)
 	require.Equal(t, user1.Role, user2.Role)
 	require.NotEmpty(t, user2.CreatedAt)
 }
@@ -58,7 +57,7 @@ func TestUpdateUser(t *testing.T) {
 	user1 := createRandomUser(t)
 
 	arg := UpdateUserParams{
-		Username: util.RandomUser(),
+		Username: user1.Username,
 		Role:     util.RandomRole(),
 	}
 
