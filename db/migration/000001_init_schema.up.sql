@@ -1,5 +1,6 @@
 CREATE TABLE `users` (
   `username` varchar(255) PRIMARY KEY,
+  `password` varchar(255) NOT NULL,
   `role` varchar(255),
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

@@ -30,6 +30,7 @@ type Collection struct {
 
 type User struct {
 	Username  string         `json:"username"`
+	Password  string         `json:"password"`
 	Role      sql.NullString `json:"role"`
 	CreatedAt time.Time      `json:"created_at"`
 }
