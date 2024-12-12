@@ -14,7 +14,7 @@ func createRandomCollection(t *testing.T) Collection {
 	require.NotEmpty(t, user)
 
 	arg := CreateCollectionParams{
-		UserID: user.ID,
+		User:   user.Username,
 		Name:   util.RandomCollection(),
 		Status: util.RandomCollectionStatus(),
 	}
@@ -33,7 +33,7 @@ func createRandomCollection(t *testing.T) Collection {
 
 	return Collection{
 		CollectionID: int32(lastId),
-		UserID:       user.ID,
+		User:         user.Username,
 		Name:         arg.Name,
 		Status:       arg.Status,
 	}

@@ -26,7 +26,6 @@ func (server *Server) setupRouter() {
 	router := gin.Default()
 
 	router.POST("/users", server.createUser)
-	router.GET("/user/:id", server.getUser)
 
 	server.router = router
 }

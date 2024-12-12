@@ -19,11 +19,8 @@ func randomString(n int) string {
 	return sb.String()
 }
 
-func RandomUser() sql.NullString {
-	return sql.NullString{
-		String: randomString(6),
-		Valid:  true,
-	}
+func RandomUser() string {
+	return randomString(6)
 }
 
 func RandomRole() sql.NullString {

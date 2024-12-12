@@ -149,18 +149,18 @@ func (q *Queries) ListBooksByCollection(ctx context.Context, arg ListBooksByColl
 const listBooksByUser = `-- name: ListBooksByUser :many
 SELECT books.book_id, books.collection_id, books.title, books.author, books.language, books.year_published, books.isbn, books.created_at FROM ((books 
 INNER JOIN collections ON books.collection_id = collections.collection_id)
-INNER JOIN users ON collections.user_id = users.id) 
-WHERE users.id = ? ORDER BY books.book_id LIMIT ? OFFSET ?
+INNER JOIN users ON collections.user = users.username) 
+WHERE users.username = ? ORDER BY books.book_id LIMIT ? OFFSET ?
 `
 
 type ListBooksByUserParams struct {
-	ID     int32 `json:"id"`
-	Limit  int32 `json:"limit"`
-	Offset int32 `json:"offset"`
+	Username string `json:"username"`
+	Limit    int32  `json:"limit"`
+	Offset   int32  `json:"offset"`
 }
 
 func (q *Queries) ListBooksByUser(ctx context.Context, arg ListBooksByUserParams) ([]Book, error) {
-	rows, err := q.db.QueryContext(ctx, listBooksByUser, arg.ID, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, listBooksByUser, arg.Username, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}

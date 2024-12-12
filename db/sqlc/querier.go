@@ -15,16 +15,15 @@ type Querier interface {
 	CreateUser(ctx context.Context, arg CreateUserParams) (sql.Result, error)
 	DeleteBook(ctx context.Context, bookID int32) error
 	DeleteCollection(ctx context.Context, collectionID int32) error
-	DeleteUser(ctx context.Context, id int32) error
+	DeleteUser(ctx context.Context, username string) error
 	GetBook(ctx context.Context, bookID int32) (Book, error)
 	GetCollection(ctx context.Context, collectionID int32) (Collection, error)
-	GetUser(ctx context.Context, id int32) (User, error)
+	GetUser(ctx context.Context, username string) (User, error)
 	ListBooks(ctx context.Context, arg ListBooksParams) ([]Book, error)
 	ListBooksByCollection(ctx context.Context, arg ListBooksByCollectionParams) ([]Book, error)
 	ListBooksByUser(ctx context.Context, arg ListBooksByUserParams) ([]Book, error)
 	ListCollections(ctx context.Context, arg ListCollectionsParams) ([]Collection, error)
 	ListCollectionsByUser(ctx context.Context, arg ListCollectionsByUserParams) ([]Collection, error)
-	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
 	UpdateBook(ctx context.Context, arg UpdateBookParams) error
 	UpdateCollection(ctx context.Context, arg UpdateCollectionParams) error
 	UpdateUser(ctx context.Context, arg UpdateUserParams) error

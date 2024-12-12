@@ -15,7 +15,7 @@ INSERT INTO users (username, role) VALUES (?, ?)
 `
 
 type CreateUserParams struct {
-	Username sql.NullString `json:"username"`
+	Username string         `json:"username"`
 	Role     sql.NullString `json:"role"`
 }
 
@@ -24,78 +24,35 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (sql.Res
 }
 
 const deleteUser = `-- name: DeleteUser :exec
-DELETE FROM users WHERE id = ?
+DELETE FROM users WHERE username = ?
 `
 
-func (q *Queries) DeleteUser(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, deleteUser, id)
+func (q *Queries) DeleteUser(ctx context.Context, username string) error {
+	_, err := q.db.ExecContext(ctx, deleteUser, username)
 	return err
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, username, role, created_at FROM users WHERE id = ? LIMIT 1
+SELECT username, role, created_at FROM users WHERE username = ? LIMIT 1
 `
 
-func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
-	row := q.db.QueryRowContext(ctx, getUser, id)
+func (q *Queries) GetUser(ctx context.Context, username string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUser, username)
 	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.Username,
-		&i.Role,
-		&i.CreatedAt,
-	)
+	err := row.Scan(&i.Username, &i.Role, &i.CreatedAt)
 	return i, err
 }
 
-const listUsers = `-- name: ListUsers :many
-SELECT id, username, role, created_at FROM users ORDER BY id LIMIT ? OFFSET ?
-`
-
-type ListUsersParams struct {
-	Limit  int32 `json:"limit"`
-	Offset int32 `json:"offset"`
-}
-
-func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error) {
-	rows, err := q.db.QueryContext(ctx, listUsers, arg.Limit, arg.Offset)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []User{}
-	for rows.Next() {
-		var i User
-		if err := rows.Scan(
-			&i.ID,
-			&i.Username,
-			&i.Role,
-			&i.CreatedAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const updateUser = `-- name: UpdateUser :exec
-UPDATE users SET username = ?, role = ? WHERE id = ?
+UPDATE users SET role = ? WHERE username = ?
 `
 
 type UpdateUserParams struct {
-	Username sql.NullString `json:"username"`
 	Role     sql.NullString `json:"role"`
-	ID       int32          `json:"id"`
+	Username string         `json:"username"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {
-	_, err := q.db.ExecContext(ctx, updateUser, arg.Username, arg.Role, arg.ID)
+	_, err := q.db.ExecContext(ctx, updateUser, arg.Role, arg.Username)
 	return err
 }

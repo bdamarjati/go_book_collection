@@ -1,6 +1,5 @@
 CREATE TABLE `users` (
-  `id` integer PRIMARY KEY AUTO_INCREMENT,
-  `username` varchar(255) UNIQUE,
+  `username` varchar(255) PRIMARY KEY,
   `role` varchar(255),
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -18,12 +17,12 @@ CREATE TABLE `books` (
 
 CREATE TABLE `collections` (
   `collection_id` integer PRIMARY KEY AUTO_INCREMENT,
-  `user_id` integer NOT NULL,
+  `user` varchar(255) NOT NULL,
   `name` varchar(255) UNIQUE,
   `status` integer,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE `collections` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `collections` ADD FOREIGN KEY (`user`) REFERENCES `users` (`username`);
 
 ALTER TABLE `books` ADD FOREIGN KEY (`collection_id`) REFERENCES `collections` (`collection_id`);

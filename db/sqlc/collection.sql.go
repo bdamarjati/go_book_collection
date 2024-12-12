@@ -11,17 +11,17 @@ import (
 )
 
 const createCollection = `-- name: CreateCollection :execresult
-INSERT INTO collections (user_id, name, status) VALUES (?, ?, ?)
+INSERT INTO collections (user, name, status) VALUES (?, ?, ?)
 `
 
 type CreateCollectionParams struct {
-	UserID int32          `json:"user_id"`
+	User   string         `json:"user"`
 	Name   sql.NullString `json:"name"`
 	Status sql.NullInt32  `json:"status"`
 }
 
 func (q *Queries) CreateCollection(ctx context.Context, arg CreateCollectionParams) (sql.Result, error) {
-	return q.db.ExecContext(ctx, createCollection, arg.UserID, arg.Name, arg.Status)
+	return q.db.ExecContext(ctx, createCollection, arg.User, arg.Name, arg.Status)
 }
 
 const deleteCollection = `-- name: DeleteCollection :exec
@@ -34,7 +34,7 @@ func (q *Queries) DeleteCollection(ctx context.Context, collectionID int32) erro
 }
 
 const getCollection = `-- name: GetCollection :one
-SELECT collection_id, user_id, name, status, created_at FROM collections WHERE collection_id = ? LIMIT 1
+SELECT collection_id, user, name, status, created_at FROM collections WHERE collection_id = ? LIMIT 1
 `
 
 func (q *Queries) GetCollection(ctx context.Context, collectionID int32) (Collection, error) {
@@ -42,7 +42,7 @@ func (q *Queries) GetCollection(ctx context.Context, collectionID int32) (Collec
 	var i Collection
 	err := row.Scan(
 		&i.CollectionID,
-		&i.UserID,
+		&i.User,
 		&i.Name,
 		&i.Status,
 		&i.CreatedAt,
@@ -51,7 +51,7 @@ func (q *Queries) GetCollection(ctx context.Context, collectionID int32) (Collec
 }
 
 const listCollections = `-- name: ListCollections :many
-SELECT collection_id, user_id, name, status, created_at FROM collections ORDER BY collection_id LIMIT ? OFFSET ?
+SELECT collection_id, user, name, status, created_at FROM collections ORDER BY collection_id LIMIT ? OFFSET ?
 `
 
 type ListCollectionsParams struct {
@@ -70,7 +70,7 @@ func (q *Queries) ListCollections(ctx context.Context, arg ListCollectionsParams
 		var i Collection
 		if err := rows.Scan(
 			&i.CollectionID,
-			&i.UserID,
+			&i.User,
 			&i.Name,
 			&i.Status,
 			&i.CreatedAt,
@@ -89,17 +89,17 @@ func (q *Queries) ListCollections(ctx context.Context, arg ListCollectionsParams
 }
 
 const listCollectionsByUser = `-- name: ListCollectionsByUser :many
-SELECT collection_id, user_id, name, status, created_at FROM collections WHERE user_id = ? ORDER BY collection_id LIMIT ? OFFSET ?
+SELECT collection_id, user, name, status, created_at FROM collections WHERE user = ? ORDER BY collection_id LIMIT ? OFFSET ?
 `
 
 type ListCollectionsByUserParams struct {
-	UserID int32 `json:"user_id"`
-	Limit  int32 `json:"limit"`
-	Offset int32 `json:"offset"`
+	User   string `json:"user"`
+	Limit  int32  `json:"limit"`
+	Offset int32  `json:"offset"`
 }
 
 func (q *Queries) ListCollectionsByUser(ctx context.Context, arg ListCollectionsByUserParams) ([]Collection, error) {
-	rows, err := q.db.QueryContext(ctx, listCollectionsByUser, arg.UserID, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, listCollectionsByUser, arg.User, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func (q *Queries) ListCollectionsByUser(ctx context.Context, arg ListCollections
 		var i Collection
 		if err := rows.Scan(
 			&i.CollectionID,
-			&i.UserID,
+			&i.User,
 			&i.Name,
 			&i.Status,
 			&i.CreatedAt,
