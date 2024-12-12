@@ -11,16 +11,17 @@ import (
 )
 
 const createUser = `-- name: CreateUser :execresult
-INSERT INTO users (username, role) VALUES (?, ?)
+INSERT INTO users (username, password, role) VALUES (?, ?, ?)
 `
 
 type CreateUserParams struct {
 	Username string         `json:"username"`
+	Password string         `json:"password"`
 	Role     sql.NullString `json:"role"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (sql.Result, error) {
-	return q.db.ExecContext(ctx, createUser, arg.Username, arg.Role)
+	return q.db.ExecContext(ctx, createUser, arg.Username, arg.Password, arg.Role)
 }
 
 const deleteUser = `-- name: DeleteUser :exec
@@ -49,15 +50,16 @@ func (q *Queries) GetUser(ctx context.Context, username string) (User, error) {
 }
 
 const updateUser = `-- name: UpdateUser :exec
-UPDATE users SET role = ? WHERE username = ?
+UPDATE users SET password = ?, role = ? WHERE username = ?
 `
 
 type UpdateUserParams struct {
+	Password string         `json:"password"`
 	Role     sql.NullString `json:"role"`
 	Username string         `json:"username"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {
-	_, err := q.db.ExecContext(ctx, updateUser, arg.Role, arg.Username)
+	_, err := q.db.ExecContext(ctx, updateUser, arg.Password, arg.Role, arg.Username)
 	return err
 }

@@ -1,5 +1,5 @@
 -- name: CreateUser :execresult
-INSERT INTO users (username, role) VALUES (?, ?);
+INSERT INTO users (username, password, role) VALUES (?, ?, ?);
 
 -- name: GetUser :one
 SELECT * FROM users WHERE username = ? LIMIT 1;
@@ -8,4 +8,4 @@ SELECT * FROM users WHERE username = ? LIMIT 1;
 DELETE FROM users WHERE username = ?;
 
 -- name: UpdateUser :exec
-UPDATE users SET role = ? WHERE username = ?;
+UPDATE users SET password = ?, role = ? WHERE username = ?;

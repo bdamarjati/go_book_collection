@@ -11,8 +11,12 @@ import (
 )
 
 func createRandomUser(t *testing.T) User {
+	hashedPassword, err := util.HashPassword(util.RandomText(6).String)
+	require.NoError(t, err)
+
 	arg := CreateUserParams{
 		Username: util.RandomUser(),
+		Password: hashedPassword,
 		Role:     util.RandomRole(),
 	}
 
@@ -56,18 +60,24 @@ func TestGetUser(t *testing.T) {
 func TestUpdateUser(t *testing.T) {
 	user1 := createRandomUser(t)
 
+	password, err := util.HashPassword(util.RandomText(6).String)
+	require.NoError(t, err)
+	require.NotEmpty(t, password)
+
 	arg := UpdateUserParams{
+		Password: password,
 		Username: user1.Username,
 		Role:     util.RandomRole(),
 	}
 
-	err := testQueries.UpdateUser(context.Background(), arg)
+	err = testQueries.UpdateUser(context.Background(), arg)
 	require.NoError(t, err)
 
 	user2, err := getUserByUsername(user1.Username)
 	require.NoError(t, err)
 	require.NotEmpty(t, user2)
 
+	require.Equal(t, arg.Password, user2.Password)
 	require.Equal(t, arg.Role, user2.Role)
 }
 
